@@ -8,7 +8,8 @@ import Finalizacao from './Pages/Finalizacao/Finalizacao';
 
 function App() {
   return (
-    <Router>
+    <>
+      {/* <Router> */}
       <ResetStyles />
       <Routes>
         <Route path="/inicio" element={<Inicio />} />
@@ -16,7 +17,8 @@ function App() {
         <Route path="/acessorios" element={<Acessorios />} />
         <Route path="/finalizacao" element={<Finalizacao />} />
       </Routes>
-    </Router>
+     {/* </Router > */}
+   </>
   );
 }
 

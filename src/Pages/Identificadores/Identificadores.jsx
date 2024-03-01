@@ -10,14 +10,13 @@ import { FemEletHdxFdxSVG, FemGrandeSVG, FemMaxiSVG, FemMediaSVG, FemOvinoCaprin
 
 export default function Inicio() {
 
-
   // Início chamando a API
   const [dataAPI, setDataAPI] = useState();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://i9bnl8uzma.execute-api.us-east-1.amazonaws.com/dev/teste2');
+        const response = await axios.get('https://i9bnl8uzma.execute-api.us-east-1.amazonaws.com/dev/data');
         setDataAPI(response.data.data);
       } catch (error) {
         console.error('Ocorreu um erro ao buscar os dados:', error);
@@ -42,7 +41,7 @@ export default function Inicio() {
   const getHexColor = (nomeCor) => {
     const corEncontrada = dataAPI.cores.find(cor => cor.cores === nomeCor);
     return corEncontrada ? corEncontrada.hex : '';
-  } 
+  }
   // Final do State e Handle de cores
 
   //Inicio de funções para abrir o carrinho
@@ -97,6 +96,22 @@ export default function Inicio() {
     return tipo_gravacao ? tipo_gravacao.tipo_gravacao : '';
   };
 
+  const clearFields = () => {
+    setSelectedSpecies('');
+    setSelectedType('');
+    setSelectedMachoType('');
+    setSelectedFemeaType('');
+    setSelectedRecordingType('');
+    setOptionType('Não aplicável');
+    setSelectedColor('Amarelo');
+    setQuantity('');
+    setInitialNumber('');
+    setFinalNumber('');
+    setFarmName('');
+    setObservation('');
+    setLogoUrl('');
+  };
+
   const addToCart = () => {
     const newItem = {
       tipo: getTypeName(selectedType),
@@ -121,6 +136,9 @@ export default function Inicio() {
     // Salva os itens do carrinho no localStorage
     const carrinhoAtualizado = [...cartItems, newItem];
     localStorage.setItem('carrinhoIdentificadores', JSON.stringify(carrinhoAtualizado));
+
+    // Limpar os campos após adicionar ao carrinho
+    clearFields();
   };
 
   // Função para remover um item do carrinho
@@ -372,26 +390,6 @@ export default function Inicio() {
                   </div>
                 </div>
                 <div className='options-div'>
-
-
-
-
-
-{/*                   <div className='options-div-small'>
-                    <span>Tipo de Fêmea</span>
-                    <select value={selectedFemeaType} onChange={(e) => handleSelectionChange('selectedFemeaType', e.target.value)} disabled={!handleDropdownEnabled('selectedFemeaType')}>
-                      <option value="">Selecione...</option>
-                      {dataAPI.machos_femeas_depara.filter(e => e.cod_macho == selectedMachoType).map((depara) => {
-                        const femea = dataAPI.femea.find(f => f.cod_femea === depara.cod_femea);
-                        if (femea) {
-                          return <option key={femea.cod_femea} value={femea.cod_femea}>{femea.femea}</option>;
-                        }
-                        return null;
-                      })}
-                    </select>
-                  </div>
-
- */}
                   <div className='options-div-small'>
                     <span>Cores disponíveis</span>
                     <select value={selectedColor} onChange={handleColorChange} disabled={!handleDropdownEnabled('selectedFemeaType')}>
@@ -405,36 +403,12 @@ export default function Inicio() {
                       })}
                     </select>
                   </div>
-
-
-
-
-
-
-
-                  {/* <div className='options-div-small'>
-                    <span>Cores disponíveis</span>
-                    <select value={selectedColor} onChange={handleColorChange}>
-                      {CoresDisponiveis.map(cor => (
-                        <option key={cor.id} value={cor.nome}>{cor.nome}</option>
-                      ))}
-                    </select>
-                  </div> */}
-
-
-
-
-
-
-
-
-
                   <div className='options-div-small'>
                     <span>Quantidade</span>
                     <input type="text" value={quantity} maxLength={5} onChange={handleInputChange(setQuantity)} />
                   </div>
                 </div>
-                {selectedType === 2 && (
+                {selectedType == 2 && (
                   <div className='options-div'>
                     <div className='options-div-small'>
                       <span>Número Inicial</span>
