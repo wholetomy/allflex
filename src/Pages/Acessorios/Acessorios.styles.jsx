@@ -18,8 +18,9 @@ export const AcessoriosDiv = styled.div`
     height: calc(100vh - 105px);
     display: flex;
 
-    @media screen and (max-width: 980px) {
-        flex-direction: column-reverse;
+    @media screen and (max-width: 810px) {
+        flex-direction: column;
+        height: unset;
     }
 `;
 
@@ -59,7 +60,7 @@ export const AcessoriosLeft = styled.div`
 
         h3 {
             font-weight: 600;
-            font-size: 22px;
+            font-size: 21px;
         }
     }
 
@@ -104,19 +105,9 @@ export const AcessoriosLeft = styled.div`
         }
     }
 
-    /* @media screen and (max-width: 980px) {
-        display: none;
-    } */
-
-    @media screen and (max-width: 980px) {
-        min-height: 250px;
+    @media screen and (max-width: 810px) {
         width: 100%;
-
-        .buttons-div-div {
-            margin-top: 15px;
-            position: unset;
-            width: 100%;
-        }
+        height: 400px;
     }
 `;
 
@@ -176,10 +167,9 @@ export const AcessoriosRight = styled.div`
         cursor: pointer;
     }
 
-    @media screen and (max-width: 980px) {
-        min-height: 250px;
+    @media screen and (max-width: 810px) {
         width: 100%;
-        justify-content: center;
+        height: 400px;
 
         .cards {
             width: 100%;
@@ -197,7 +187,7 @@ export const AcessoriosRight = styled.div`
                 object-fit: cover;
                 width: 100%;
             }
-        }
+        } 
     }
 `;
 
@@ -366,3 +356,9 @@ export const ItemCarrinho = styled.div`
     }
      
 `;
+
+export const EtapasDiv = styled.div`
+    @media screen and (max-width: 500px) {
+        display: none;
+    }
+`; 

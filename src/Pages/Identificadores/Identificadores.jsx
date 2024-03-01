@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-import { IdentificadoresContainer, IdentificadoresDiv, IdentificadoresLeft, IdentificadoresRight, LogoViewer, Carrinho } from './Identificadores.styles'
+import { IdentificadoresContainer, IdentificadoresDiv, IdentificadoresLeft, IdentificadoresRight, LogoViewer, Carrinho, EtapasDiv } from './Identificadores.styles'
 import Etapas from '../../Components/Etapas/Etapas'
 import { Link } from 'react-router-dom';
-import { tiposIdentificador, especies, tiposMacho, tiposFemea, tiposGravacao } from '../../Components/Dropdowns/Identificadores.dropdowns.jsx';
 import shopingCartIcon from '../../Components/Images/Identificadores/shopping-cart-icon.svg';
 import Trash from '../../Components/Images/Acessorios/trash.svg';
 import { FemEletHdxFdxSVG, FemGrandeSVG, FemMaxiSVG, FemMediaSVG, FemOvinoCaprinoSVG, FemPequenaSVG, FemSuinoOvinoSVG, MachoGrandeSVG, MachoMaxiSVG, MachoMedioSVG, MachoOvinoCaprinoSVG, MachoPequenoSVG, MachoTipTagSVG } from '../../Components/SVG/Identificadores.svg.jsx';
@@ -30,17 +29,8 @@ export default function Inicio() {
   // Final chamando a API
 
   // Início do State e Handle de cores
-  const [selectedColor, setSelectedColor] = useState('Amarelo');
+  const [selectedColor, setSelectedColor] = useState('Amarelo')
   const [hexCorSelecionada, setHexCorSelecionada] = useState('');
-
-  const CoresDisponiveis = [ // Isso precisa vir do banco...
-    { id: 1, hex: '#EEEE22', nome: 'Amarelo' },
-    { id: 2, hex: '#22BAD8', nome: 'Azul' },
-    { id: 3, hex: '#FFFFFF', nome: 'Branco' },
-    { id: 4, hex: '#F4901D', nome: 'Laranja' },
-    { id: 5, hex: '#71AF36', nome: 'Verde' },
-    { id: 6, hex: '#DD3333', nome: 'Vermelho' }
-  ];
 
   const handleColorChange = (event) => {
     const corSelecionada = event.target.value;
@@ -50,9 +40,9 @@ export default function Inicio() {
   }
 
   const getHexColor = (nomeCor) => {
-    const corEncontrada = CoresDisponiveis.find(cor => cor.nome === nomeCor);
+    const corEncontrada = dataAPI.cores.find(cor => cor.cores === nomeCor);
     return corEncontrada ? corEncontrada.hex : '';
-  }
+  } 
   // Final do State e Handle de cores
 
   //Inicio de funções para abrir o carrinho
@@ -67,7 +57,7 @@ export default function Inicio() {
   };
   //Final de funções para abrir o carrinho
 
-  //Inicio de funções para adicionar e remover itens falsos no carrinho
+  //Inicio de funções para adicionar e remover itens no carrinho
   const [cartItems, setCartItems] = useState([]);
   const [selectedSpecies, setSelectedSpecies] = useState('');
   const [selectedType, setSelectedType] = useState('');
@@ -79,7 +69,7 @@ export default function Inicio() {
   const [finalNumber, setFinalNumber] = useState('');
   const [farmName, setFarmName] = useState('');
   const [observation, setObservation] = useState('');
-  const [optionType, setOptionType] = useState('');
+  const [optionType, setOptionType] = useState('Não aplicável');
 
   // Função utilitária para encontrar o nome da espécie com base no código de espécie
   const getSpecieName = (codEspecie) => {
@@ -109,11 +99,12 @@ export default function Inicio() {
 
   const addToCart = () => {
     const newItem = {
-      especie: getSpecieName(selectedSpecies),
       tipo: getTypeName(selectedType),
+      especie: getSpecieName(selectedSpecies),
       macho: getMachoTypeName(selectedMachoType),
       femea: getFemeaTypeName(selectedFemeaType),
       gravacao: getRecordingTypeName(selectedRecordingType),
+      opcao: optionType,
       cor: selectedColor,
       quantidade: quantity,
       numeroInicial: initialNumber,
@@ -150,7 +141,7 @@ export default function Inicio() {
       setCartItems(JSON.parse(carrinhoSalvo));
     }
   }, []);
-  //Final de funções para adicionar e remover itens falsos no carrinho
+  //Final de funções para adicionar e remover itens no carrinho
 
   //Inicio de Logo
   const [logoUrl, setLogoUrl] = useState('');
@@ -213,11 +204,93 @@ export default function Inicio() {
   }, [selectedType]);
   //Inicio Funções de Limpar os valores iniciais e finais
 
+  //Início de funções para lidar com os dropdowns
+  // Função para controlar o estado de habilitação dos dropdowns com base nas seleções
+  const handleDropdownEnabled = (dropdown, value) => {
+    switch (dropdown) {
+      case 'optionType':
+        return selectedType !== '';
+      case 'selectedSpecies':
+        return selectedType !== '';
+      case 'selectedMachoType':
+        return selectedSpecies !== '';
+      case 'selectedFemeaType':
+        return selectedMachoType !== '';
+      case 'selectedRecordingType':
+        return selectedFemeaType !== '';
+      default:
+        return false;
+    }
+  };
+
+  // Função para lidar com a alteração de uma seleção
+  const handleSelectionChange = (dropdown, value) => {
+    switch (dropdown) {
+      case 'selectedType':
+        setSelectedType(value);
+        setOptionType('');
+        setSelectedSpecies('');
+        setSelectedMachoType('');
+        setSelectedFemeaType('');
+        setSelectedRecordingType('');
+        break;
+      case 'optionType':
+        setOptionType(value);
+        setSelectedSpecies('');
+        setSelectedMachoType('');
+        setSelectedFemeaType('');
+        setSelectedRecordingType('');
+        break;
+      case 'selectedSpecies':
+        setSelectedSpecies(value);
+        setSelectedMachoType('');
+        setSelectedFemeaType('');
+        setSelectedRecordingType('');
+        break;
+      case 'selectedMachoType':
+        setSelectedMachoType(value);
+        setSelectedFemeaType('');
+        setSelectedRecordingType('');
+        setSelectedColor('Amarelo');
+        break;
+      case 'selectedFemeaType':
+        setSelectedFemeaType(value);
+        setSelectedRecordingType('');
+        break;
+      case 'selectedRecordingType':
+        setSelectedRecordingType(value);
+        break;
+      default:
+        break;
+    }
+  };
+  //Final de funções para lidar com os dropdowns
+
+  //Início de funções para corrigir valores nos dropdowns
+  const handleInputChange = (setValue) => (e) => {
+    const value = e.target.value;
+    // Verifica se o valor é um número (apenas dígitos)
+    if (/^\d*$/.test(value)) {
+      setValue(value);
+    }
+  };
+
+  const handleMouseOver = (event, content) => {
+    if (event.target.offsetWidth < event.target.scrollWidth) {
+      event.target.title = content;
+    } else {
+      event.target.title = '';
+    }
+  };
+  //Final de funções para corrigir valores nos dropdowns
+
   return (
     <>
       {dataAPI ?
         <IdentificadoresContainer>
-          <Etapas etapa={1} />
+          <EtapasDiv>
+            <Etapas etapa={1} />
+          </EtapasDiv>
           <IdentificadoresDiv>
             <IdentificadoresLeft>
               <div className='title'>
@@ -228,7 +301,7 @@ export default function Inicio() {
                 <div className='options-div'>
                   <div className='options-div-long'>
                     <span>Tipo do Identificador</span>
-                    <select value={selectedType} onChange={(e) => setSelectedType(e.target.value)}>
+                    <select value={selectedType} onChange={(e) => handleSelectionChange('selectedType', e.target.value)}>
                       <option value="">Selecione...</option>
                       {dataAPI.tipo_identificador.map((tipo) => (
                         <option key={tipo.cod_tipo_identificador} value={tipo.cod_tipo_identificador}>{tipo.tipo_identificador}</option>
@@ -240,7 +313,8 @@ export default function Inicio() {
                   <div className='options-div'>
                     <div className='options-div-long'>
                       <span>Opção do Identificador</span>
-                      <select value={optionType} onChange={(e) => setOptionType(e.target.value)}>
+                      <select value={optionType} onChange={(e) => handleSelectionChange('optionType', e.target.value)} disabled={!handleDropdownEnabled('optionType')}>
+                        <option value="">Selecione...</option>
                         <option value="Inviolável">Inviolável</option>
                         <option value="Reutilizável">Reutilizável</option>
                       </select>
@@ -250,7 +324,7 @@ export default function Inicio() {
                 <div className='options-div'>
                   <div className='options-div-long'>
                     <span>Selecione a espécie</span>
-                    <select value={selectedSpecies} onChange={(e) => setSelectedSpecies(e.target.value)}>
+                    <select value={selectedSpecies} onChange={(e) => handleSelectionChange('selectedSpecies', e.target.value)} disabled={!handleDropdownEnabled('selectedSpecies') || !selectedType}>
                       <option value="">Selecione...</option>
                       {dataAPI.especie.filter(e => e.cod_tipo_identificador == selectedType).map((especie) => (
                         <option key={especie.cod_especie} value={especie.cod_especie}>{especie.especie}</option>
@@ -261,7 +335,7 @@ export default function Inicio() {
                 <div className='options-div'>
                   <div className='options-div-small'>
                     <span>Tipo de Macho</span>
-                    <select value={selectedMachoType} onChange={(e) => setSelectedMachoType(e.target.value)}>
+                    <select value={selectedMachoType} onChange={(e) => handleSelectionChange('selectedMachoType', e.target.value)} disabled={!handleDropdownEnabled('selectedMachoType')}>
                       <option value="">Selecione...</option>
                       {dataAPI.macho.filter(e => e.cod_especie == selectedSpecies).map((macho) => (
                         <option key={macho.cod_macho} value={macho.cod_macho}>{macho.macho}</option>
@@ -270,69 +344,116 @@ export default function Inicio() {
                   </div>
                   <div className='options-div-small'>
                     <span>Tipo de Fêmea</span>
-                    <select value={selectedFemeaType} onChange={(e) => setSelectedFemeaType(e.target.value)}>
+                    <select value={selectedFemeaType} onChange={(e) => handleSelectionChange('selectedFemeaType', e.target.value)} disabled={!handleDropdownEnabled('selectedFemeaType')}>
                       <option value="">Selecione...</option>
-                      {dataAPI.machos_femeas_depara.filter(e => e.cod_macho == selectedMachoType)
-                        .map((depara) => {
-                          const femea = dataAPI.femea.find(f => f.cod_femea === depara.cod_femea);
-                          if (femea) {
-                            return <option key={femea.cod_femea} value={femea.cod_femea}>{femea.femea}</option>;
-                          }
-                          return null;
-                        })}
+                      {dataAPI.machos_femeas_depara.filter(e => e.cod_macho == selectedMachoType).map((depara) => {
+                        const femea = dataAPI.femea.find(f => f.cod_femea === depara.cod_femea);
+                        if (femea) {
+                          return <option key={femea.cod_femea} value={femea.cod_femea}>{femea.femea}</option>;
+                        }
+                        return null;
+                      })}
                     </select>
                   </div>
                 </div>
                 <div className='options-div'>
                   <div className='options-div-long'>
                     <span>Tipo de gravação</span>
-                    <select value={selectedRecordingType} onChange={(e) => setSelectedRecordingType(e.target.value)}>
+                    <select value={selectedRecordingType} onChange={(e) => handleSelectionChange('selectedRecordingType', e.target.value)} disabled={!handleDropdownEnabled('selectedRecordingType')}>
                       <option value="">Selecione...</option>
-                      {dataAPI.femeas_tipo_gravacoes_depara.filter(e => e.cod_femea == selectedFemeaType)
-                        .map((depara) => {
-                          const tipo_gravacao = dataAPI.tipo_gravacao.find(t => t.cod_tipo_gravacao === depara.cod_tipo_gravacao);
-                          if (tipo_gravacao) {
-                            return <option key={tipo_gravacao.cod_tipo_gravacao} value={tipo_gravacao.cod_tipo_gravacao}>{tipo_gravacao.tipo_gravacao}</option>
-                          }
-                          return null;
-                        })}
+                      {dataAPI.femeas_tipo_gravacoes_depara.filter(e => e.cod_femea == selectedFemeaType).map((depara) => {
+                        const tipo_gravacao = dataAPI.tipo_gravacao.find(t => t.cod_tipo_gravacao === depara.cod_tipo_gravacao);
+                        if (tipo_gravacao) {
+                          return <option key={tipo_gravacao.cod_tipo_gravacao} value={tipo_gravacao.cod_tipo_gravacao}>{tipo_gravacao.tipo_gravacao}</option>
+                        }
+                        return null;
+                      })}
                     </select>
                   </div>
                 </div>
                 <div className='options-div'>
+
+
+
+
+
+{/*                   <div className='options-div-small'>
+                    <span>Tipo de Fêmea</span>
+                    <select value={selectedFemeaType} onChange={(e) => handleSelectionChange('selectedFemeaType', e.target.value)} disabled={!handleDropdownEnabled('selectedFemeaType')}>
+                      <option value="">Selecione...</option>
+                      {dataAPI.machos_femeas_depara.filter(e => e.cod_macho == selectedMachoType).map((depara) => {
+                        const femea = dataAPI.femea.find(f => f.cod_femea === depara.cod_femea);
+                        if (femea) {
+                          return <option key={femea.cod_femea} value={femea.cod_femea}>{femea.femea}</option>;
+                        }
+                        return null;
+                      })}
+                    </select>
+                  </div>
+
+ */}
                   <div className='options-div-small'>
+                    <span>Cores disponíveis</span>
+                    <select value={selectedColor} onChange={handleColorChange} disabled={!handleDropdownEnabled('selectedFemeaType')}>
+                      {/* <option value="">Selecione...</option> */}
+                      {dataAPI.cores_machos_depara.filter(e => e.cod_macho == selectedMachoType).map((depara) => {
+                        const cor = dataAPI.cores.find(c => c.cod_cores === depara.cod_cor);
+                        if (cor) {
+                          return <option key={cor.cod_cores} value={cor.cores}>{cor.cores}</option>
+                        }
+                        return null;
+                      })}
+                    </select>
+                  </div>
+
+
+
+
+
+
+
+                  {/* <div className='options-div-small'>
                     <span>Cores disponíveis</span>
                     <select value={selectedColor} onChange={handleColorChange}>
                       {CoresDisponiveis.map(cor => (
                         <option key={cor.id} value={cor.nome}>{cor.nome}</option>
                       ))}
                     </select>
-                  </div>
+                  </div> */}
+
+
+
+
+
+
+
+
+
                   <div className='options-div-small'>
                     <span>Quantidade</span>
-                    <input type="text" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+                    <input type="text" value={quantity} maxLength={5} onChange={handleInputChange(setQuantity)} />
                   </div>
                 </div>
-                {selectedType == 2 && (
+                {selectedType === 2 && (
                   <div className='options-div'>
                     <div className='options-div-small'>
                       <span>Número Inicial</span>
-                      <input type="text" value={initialNumber} onChange={(e) => setInitialNumber(e.target.value)} />
+                      <input type="text" value={initialNumber} maxLength={5} onChange={handleInputChange(setInitialNumber)} />
                     </div>
                     <div className='options-div-small'>
                       <span>Número Final</span>
-                      <input type="text" value={finalNumber} onChange={(e) => setFinalNumber(e.target.value)} />
+                      <input type="text" value={finalNumber} maxLength={5} onChange={handleInputChange(setFinalNumber)} />
                     </div>
                   </div>
                 )}
                 <div className='options-div'>
                   <div className='options-div-long'>
                     <span>Nome da fazenda</span>
-                    <input type="text" value={farmName} onChange={(e) => setFarmName(e.target.value)} />
+                    <input type="text" value={farmName} maxLength={40} onChange={(e) => setFarmName(e.target.value)} />
                   </div>
                 </div>
                 <div className='options-div'>
-                  <div className='options-div-small'>
+                  <div className='options-div-long'>
                     <span>Logo</span>
                     <input type="file" accept=".jpg, .jpeg, .png" onChange={handleFileChange} />
                   </div>
@@ -340,7 +461,7 @@ export default function Inicio() {
                 <div className='options-div'>
                   <div className='options-div-long'>
                     <span>Observação</span>
-                    <textarea placeholder='Explique sobre alguma personalização da sua gravação' value={observation} onChange={(e) => setObservation(e.target.value)} />
+                    <textarea placeholder='Explique sobre alguma personalização da sua gravação' maxLength={300} value={observation} onChange={(e) => setObservation(e.target.value)} />
                   </div>
                 </div>
               </div>
@@ -382,16 +503,19 @@ export default function Inicio() {
                       <table className="carrinho-table">
                         <thead>
                           <tr>
-                            <th>Espécie</th>
                             <th>Tipo</th>
+                            <th>Espécie</th>
+                            <th>Opção</th>
                             <th>Macho</th>
                             <th>Fêmea</th>
+                            <th>Gravação</th>
                             <th>Cor</th>
+                            <th>Fazenda</th>
                             <th>Quantidade</th>
                             <th>Número Inicial</th>
                             <th>Número Final</th>
-                            <th>Vezes</th>
-                            <th>Código de Barras</th>
+                            {/* <th>Vezes</th> */}
+                            {/* <th>Código de Barras</th> */}
                             <th>Logo</th>
                             <th>Observação</th>
                             <th></th>
@@ -400,20 +524,22 @@ export default function Inicio() {
                         <tbody>
                           {cartItems.map((item, index) => (
                             <tr key={index}>
-                              <td>{item.especie}</td>
-                              <td>{item.tipo}</td>
-                              <td>{item.macho}</td>
-                              <td>{item.femea}</td>
-                              <td>{item.cor}</td>
-                              <td>{item.quantidade}</td>
-                              <td>{item.numeroInicial}</td>
-                              <td>{item.numeroFinal}</td>
-                              <td>{item.vezes}</td>
-                              <td>{item.codigoDeBarras}</td>
-                              <td><img src={item.logo} alt="Logo" /></td>
-                              <td>{item.observacao}</td>
+                              <td onMouseOver={(e) => handleMouseOver(e, item.tipo)}>{item.tipo && item.tipo.length > 20 ? `${item.tipo.slice(0, 20)}...` : item.tipo}</td>
+                              <td onMouseOver={(e) => handleMouseOver(e, item.especie)}>{item.especie && item.especie.length > 20 ? `${item.especie.slice(0, 20)}...` : item.especie}</td>
+                              <td onMouseOver={(e) => handleMouseOver(e, item.opcao)}>{item.opcao && item.opcao.length > 20 ? `${item.opcao.slice(0, 20)}...` : item.opcao}</td>
+                              <td onMouseOver={(e) => handleMouseOver(e, item.macho)}>{item.macho && item.macho.length > 20 ? `${item.macho.slice(0, 20)}...` : item.macho}</td>
+                              <td onMouseOver={(e) => handleMouseOver(e, item.femea)}>{item.femea && item.femea.length > 20 ? `${item.femea.slice(0, 20)}...` : item.femea}</td>
+                              <td onMouseOver={(e) => handleMouseOver(e, item.gravacao)}>{item.gravacao && item.gravacao.length > 20 ? `${item.gravacao.slice(0, 20)}...` : item.gravacao}</td>
+                              <td onMouseOver={(e) => handleMouseOver(e, item.cor)}>{item.cor && item.cor.length > 20 ? `${item.cor.slice(0, 20)}...` : item.cor}</td>
+                              <td onMouseOver={(e) => handleMouseOver(e, item.fazenda)}>{item.fazenda && item.fazenda.length > 20 ? `${item.fazenda.slice(0, 20)}...` : item.fazenda}</td>
+                              <td onMouseOver={(e) => handleMouseOver(e, item.quantidade)}>{item.quantidade && item.quantidade.length > 20 ? `${item.quantidade.slice(0, 20)}...` : item.quantidade}</td>
+                              <td onMouseOver={(e) => handleMouseOver(e, item.numeroInicial)}>{item.numeroInicial && item.numeroInicial.length > 20 ? `${item.numeroInicial.slice(0, 20)}...` : item.numeroInicial}</td>
+                              <td onMouseOver={(e) => handleMouseOver(e, item.numeroFinal)}>{item.numeroFinal && item.numeroFinal.length > 20 ? `${item.numeroFinal.slice(0, 20)}...` : item.numeroFinal}</td>
+                              {/* <td onMouseOver={(e) => handleMouseOver(e, item.vezes)}>{item.vezes && item.vezes.length > 20 ? `${item.vezes.slice(0, 20)}...` : item.vezes}</td>
+                              <td onMouseOver={(e) => handleMouseOver(e, item.codigoDeBarras)}>{item.codigoDeBarras && item.codigoDeBarras.length > 20 ? `${item.codigoDeBarras.slice(0, 20)}...` : item.codigoDeBarras}</td> */}
+                              <td onMouseOver={(e) => handleMouseOver(e, item.logo)}>{item.logo ? <img src={item.logo} alt="Logo" /> : 'Não'}</td>
+                              <td onMouseOver={(e) => handleMouseOver(e, item.observacao)}>{item.observacao && item.observacao.length > 20 ? `${item.observacao.slice(0, 20)}...` : item.observacao}</td>
                               <td>
-                                {/* <button onClick={() => removeItemFromCart(index)}>X</button> */}
                                 <img src={Trash} className='trash-icon' onClick={() => removeItemFromCart(index)} alt="trash" />
                               </td>
                             </tr>
@@ -430,24 +556,28 @@ export default function Inicio() {
               </Carrinho>
             ) : (
               <IdentificadoresRight corSelecionada={getHexColor(selectedColor)}>
-                <div className='macho-div'>
-                  <h1>Macho</h1>
-                  <div className='macho-cor'>
-                    {machoSVGs[selectedMachoType]}
+                {machoSVGs[selectedMachoType] && (
+                  <div className='macho-div'>
+                    <h1>Macho</h1>
+                    <div className='macho-cor'>
+                      {machoSVGs[selectedMachoType]}
+                    </div>
                   </div>
-                </div>
-                <div className='femea-div'>
-                  <h1>Fêmea</h1>
-                  <div className='femea-cor'>
-                    {femeaSVGs[selectedFemeaType]}
+                )}
+                {femeaSVGs[selectedFemeaType] && (
+                  <div className='femea-div'>
+                    <h1>Fêmea</h1>
+                    <div className='femea-cor'>
+                      {femeaSVGs[selectedFemeaType]}
+                    </div>
                   </div>
-                </div>
+                )}
               </IdentificadoresRight>
             )}
           </IdentificadoresDiv>
         </IdentificadoresContainer>
         :
-        <div>POR UM LOADING AQUI SEILA</div>
+        <div>{/* por um loading aqui */}</div>
       }
     </>
   )

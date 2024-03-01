@@ -17,6 +17,11 @@ export const FinalizacaoDiv = styled.div`
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
     height: calc(100vh - 105px);
     display: flex;
+
+    @media screen and (max-width: 810px) {
+        flex-direction: column;
+        height: unset;
+    }
 `;
 
 export const FinalizacaoLeft = styled.div`
@@ -48,7 +53,7 @@ export const FinalizacaoLeft = styled.div`
 
         h3 {
             font-weight: 600;
-            font-size: 22px;
+            font-size: 21px;
         }
     }
 
@@ -108,7 +113,8 @@ export const FinalizacaoLeft = styled.div`
     .options-div-small {
         display: flex;
         flex-direction: column;
-        width: 140px;
+        /* width: 140px; */
+        width: 49%;
         justify-content: flex-end;
     }
 
@@ -133,6 +139,17 @@ export const FinalizacaoLeft = styled.div`
         color: #5c3161;
         background-color: #bee9e8;
     }
+
+    /* Dentro do seu arquivo de estilos (por exemplo, Finalizacao.styles.js) */
+
+    .required {
+        color: red;
+    }
+
+    @media screen and (max-width: 810px) {
+        width: 100%;
+        height: 400px;
+    }
 `;
 
 export const FinalizacaoRight = styled.div`
@@ -144,13 +161,11 @@ export const FinalizacaoRight = styled.div`
     flex-direction: column;
     
     .identificadores-div {
-        /* background-color: pink; */
         max-height: 50%;
         overflow: auto;
     }
 
     .acessorios-div {
-        /* background-color: limegreen; */
         max-height: 50%;
         overflow-y: auto;
     }
@@ -158,6 +173,7 @@ export const FinalizacaoRight = styled.div`
     .identificadores-div h1, 
     .acessorios-div h1 {
         color: #5c3161;
+        font-size: 1.6rem;
     }
 
     .identificadores-table {
@@ -168,13 +184,15 @@ export const FinalizacaoRight = styled.div`
     .identificadores-table th,
     .identificadores-table td {
         border: 1px solid #ddd;
-        padding: 8px;
+        padding: 0.1rem;
         text-align: left;
+        white-space: nowrap;
     }
 
     .identificadores-table th {
         background-color: #3f83bd;
         color: #ffffff;
+        padding-right: 10px;
     }
 
     .identificadores-table tbody tr:hover {
@@ -222,11 +240,13 @@ export const FinalizacaoRight = styled.div`
         border: 1px solid #ddd;
         padding: 8px;
         text-align: left;
+        white-space: nowrap;
     }
 
     .acessorios-table th {
         background-color: #3f83bd;
         color: #ffffff;
+        padding-right: 10px;
     }
 
     .acessorios-table tbody tr:hover {
@@ -259,11 +279,35 @@ export const FinalizacaoRight = styled.div`
         border-bottom-right-radius: 5px;
     }
 
-    .identificadores-table > tbody > tr > td:nth-child(11) > img {
+    .identificadores-table > tbody > tr > td:nth-child(12) > img {
         width: 25px;
     }
 
-
-
+    @media screen and (max-width: 810px) {
+        width: 100%;
+        height: 400px;
+    }
 `;
 
+export const EtapasDiv = styled.div`
+    @media screen and (max-width: 500px) {
+        display: none;
+    }
+`;
+
+export const Modal = styled.div`
+    position: absolute;
+    max-width: 800px;
+    padding: 25px;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.17);
+    border-radius: 14px;
+    margin: 25px;
+
+    .x-button {
+        position: absolute;
+        right: 25px;
+        cursor: pointer;
+    }
+`;

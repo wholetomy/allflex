@@ -12,7 +12,7 @@ export default function Inicio() {
             <h1>Identificadores Allflex</h1>
             <p>Descubra o poder da inovação na gestão de rebanhos com identificadores Allflex. Oferecemos soluções que proporcionam eficiência e controle total do seu negócio. Simplifique o manejo do rebanho e eleve seus resultados com a qualidade incomparável dos produtos Allflex.</p>
             <Link to="/identificadores">
-              <button>Começar</button>
+              <button>Comprar Agora</button>
             </Link>
           </div>
         </div>

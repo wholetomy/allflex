@@ -17,6 +17,11 @@ export const IdentificadoresDiv = styled.div`
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
     height: calc(100vh - 105px);
     display: flex;
+
+    @media screen and (max-width: 810px) {
+        flex-direction: column;
+        height: unset;
+    }
 `;
 
 export const IdentificadoresLeft = styled.div`
@@ -37,7 +42,8 @@ export const IdentificadoresLeft = styled.div`
     .title {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        /* justify-content: space-between; */
+        grid-gap: 10px;
 
         span {
             background-color: #5c3161;
@@ -53,7 +59,7 @@ export const IdentificadoresLeft = styled.div`
 
         h3 {
             font-weight: 600;
-            font-size: 22px;
+            font-size: 21px;
         }
     }
 
@@ -108,7 +114,8 @@ export const IdentificadoresLeft = styled.div`
     .options-div-small {
         display: flex;
         flex-direction: column;
-        width: 140px;
+        /*  width: 140px; */
+        width: 49%;
         justify-content: flex-end;
     }
 
@@ -126,7 +133,8 @@ export const IdentificadoresLeft = styled.div`
         cursor: pointer;
         bottom: 25px;
         right: 28px;
-        width: 140px;
+        /* width: 140px; */
+        width: 100%;
     }
 
     .notification {
@@ -147,6 +155,11 @@ export const IdentificadoresLeft = styled.div`
 
     .button-with-notification {
         position: relative;
+    }
+
+    @media screen and (max-width: 810px) {
+        width: 100%;
+        height: 400px;
     }
 `;
 
@@ -207,6 +220,21 @@ export const IdentificadoresRight = styled.div`
             fill: ${(props) => props.corSelecionada};
         }
     }
+
+    @media screen and (max-width: 810px) {
+        width: 100%;
+        flex-wrap: wrap;
+        overflow-y: auto;
+        grid-gap: unset;
+        align-items: center;
+        min-height: 400px;
+    }
+
+    @media screen and (max-width: 480px) {
+        .macho-div, .femea-div {
+            width: 100%;
+        }
+    }
 `;
 
 export const LogoViewer = styled.div`
@@ -228,34 +256,24 @@ export const LogoViewer = styled.div`
 
 export const Carrinho = styled.div`
     padding: 15px;
-    width: 100%;
     width: calc(100% - 334px);
 
     .carrinho-title-div {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        margin-bottom: 5px;
 
         h1 {
             color: #5c3161;
+            font-size: 1.6rem;
+            width: 100%;
+            text-align: left;
         }
-    }
 
-    .voltar-button {
-        padding: 8px 16px;
-        background-color: #bee9e8;
-        color: #5c3161;
-        outline: none;
-        border: none;
-        border-radius: 4px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        grid-gap: 5px;
-        cursor: pointer;
-        bottom: 25px;
-        right: 28px;
-        width: 140px;
+        @media screen and (max-width: 810px) {
+            flex-direction: column-reverse;
+        }
     }
 
     .carrinho-table-div {
@@ -265,7 +283,7 @@ export const Carrinho = styled.div`
         margin-bottom: 10px;
     }
 
-    .carrinho-table-div > table > tbody > tr > td:nth-child(11) > img {
+    .carrinho-table-div > table > tbody > tr > td:nth-child(12) > img {
         width: 25px;
     }
 
@@ -280,13 +298,15 @@ export const Carrinho = styled.div`
 
     .carrinho-table th, .carrinho-table td {
         border: 1px solid #ddd;
-        padding: 8px;
+        padding: 0.1rem;
         text-align: left;
+        white-space: nowrap;
     }
 
     .carrinho-table th {
         background-color: #3f83bd;
         color: #ffffff;
+        padding-right: 10px;
     }
 
     .carrinho-table tbody tr:hover {
@@ -304,6 +324,24 @@ export const Carrinho = styled.div`
         grid-gap: 10px;
     }
 
+    .voltar-button {
+        padding: 8px 16px;
+        background-color: #bee9e8;
+        color: #5c3161;
+        outline: none;
+        border: none;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        grid-gap: 5px;
+        cursor: pointer;
+        bottom: 25px;
+        right: 28px;
+        width: 140px;
+        /* width: 100%; */
+    }
+
     .proxima-etapa-button {
         padding: 8px 16px;
         background-color: #5c3161;
@@ -319,6 +357,37 @@ export const Carrinho = styled.div`
         bottom: 25px;
         right: 28px;
         width: 140px;
+        /* width: 100%; */
     }
 
+    @media screen and (max-width: 810px) {
+        width: 100%;
+        flex-wrap: wrap;
+        grid-gap: unset;
+        align-items: center;
+        height: 400px;
+
+        .carrinho-table-div {
+            height: 80%;
+        }
+
+        .proxima-etapa-button-div, 
+        .proxima-etapa-button {
+            width: 100%;
+        }
+
+        .proxima-etapa-button-div a {
+            width: 49%;
+        }
+ 
+        .voltar-button {
+            width: 49%;
+        }
+    }
 `;
+
+export const EtapasDiv = styled.div`
+    @media screen and (max-width: 500px) {
+        display: none;
+    }
+`; 

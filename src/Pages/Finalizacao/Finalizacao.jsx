@@ -1,10 +1,34 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import Etapas from '../../Components/Etapas/Etapas'
-import { FinalizacaoContainer, FinalizacaoDiv, FinalizacaoLeft, FinalizacaoRight } from './Finalizacao.styles';
+import { FinalizacaoContainer, FinalizacaoDiv, FinalizacaoLeft, FinalizacaoRight, EtapasDiv, Modal } from './Finalizacao.styles';
 import Trash from '../../Components/Images/Acessorios/trash.svg';
+import Xbutton from '../../Components/Images/Acessorios/x-square.svg';
 
 export default function Finalizacao() {
+
+  //Início obrigatoriedade dos campos
+
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleSolicitarPedido = () => {
+    const camposObrigatorios = ['cnpjCpf', 'nomeFazenda', 'telefone', 'email'];
+    const camposPreenchidos = camposObrigatorios.every((campo) => clienteInfo[campo].trim() !== '');
+
+    if (camposPreenchidos) {
+      // Todos os campos obrigatórios estão preenchidos, continuar com a lógica para solicitar o pedido
+      localStorage.setItem('informacoesCliente', JSON.stringify(clienteInfo));
+    } else {
+      // Exibir o modal de aviso informando que todos os campos obrigatórios devem ser preenchidos
+      setModalVisible(true);
+    }
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
+  //Final obrigatoriedade dos campos
 
   //Início de funções para pegar o carrinho de acessórios
   const [carrinhoIdentificadores, setCarrinhoIdentificadores] = useState([]);
@@ -98,21 +122,21 @@ export default function Finalizacao() {
     }));
   };
 
-  // Função para lidar com o clique no botão "Solicitar pedido"
-  const handleSolicitarPedido = () => {
-    // Armazenar os dados no localStorage
-    localStorage.setItem('informacoesCliente', JSON.stringify(clienteInfo));
-    // Redirecionar ou realizar outra ação após armazenar os dados
-    // Aqui você pode redirecionar para outra página ou fazer qualquer outra coisa necessária
+  const handleMouseOver = (event, content) => {
+    if (event.target.offsetWidth < event.target.scrollWidth) {
+      event.target.title = content;
+    } else {
+      event.target.title = '';
+    }
   };
-
-  // Final definindo estados para os inputs, dropdowns e textareas
 
 
   return (
     <>
       <FinalizacaoContainer>
-        <Etapas etapa={3} />
+        <EtapasDiv>
+          <Etapas etapa={3} />
+        </EtapasDiv>
         <FinalizacaoDiv>
           <FinalizacaoLeft>
             <div className='title'>
@@ -131,7 +155,7 @@ export default function Finalizacao() {
               </div>
               <div className='options-div'>
                 <div className='options-div-small'>
-                  <span>Digite seu CNPJ/CPF</span>
+                  <span>Digite seu CNPJ/CPF<span className="required">*</span></span>
                   <input type="text" name="cnpjCpf" value={clienteInfo.cnpjCpf} onChange={handleChange} />
                 </div>
                 <div className='options-div-small'>
@@ -141,19 +165,19 @@ export default function Finalizacao() {
               </div>
               <div className='options-div'>
                 <div className='options-div-long'>
-                  <span>Nome da fazenda</span>
-                  <input type="text" name="nomeFazenda" value={clienteInfo.nomeFazenda} onChange={handleChange} />
+                  <span>Nome da fazenda<span className="required">*</span></span>
+                  <input type="text" name="nomeFazenda" maxLength={40} value={clienteInfo.nomeFazenda} onChange={handleChange} />
                 </div>
               </div>
               <div className='options-div'>
                 <div className='options-div-long'>
-                  <span>Digite seu telefone</span>
-                  <input type="text" name="telefone" value={clienteInfo.telefone} onChange={handleChange} />
+                  <span>Digite seu telefone<span className="required">*</span></span>
+                  <input type="text" name='telefone' value={clienteInfo.telefone} onChange={handleChange} />
                 </div>
               </div>
               <div className='options-div'>
                 <div className='options-div-long'>
-                  <span>Digite seu e-mail</span>
+                  <span>Digite seu e-mail<span className="required">*</span></span>
                   <input type="text" name="email" value={clienteInfo.email} onChange={handleChange} />
                 </div>
               </div>
@@ -184,16 +208,17 @@ export default function Finalizacao() {
                 <table className="identificadores-table">
                   <thead>
                     <tr>
-                      <th>Espécie</th>
                       <th>Tipo</th>
+                      <th>Espécie</th>
+                      <th>Opção</th>
                       <th>Macho</th>
                       <th>Fêmea</th>
+                      <th>Gravação</th>
                       <th>Cor</th>
+                      <th>Fazenda</th>
                       <th>Quantidade</th>
                       <th>Número Inicial</th>
                       <th>Número Final</th>
-                      <th>Vezes</th>
-                      <th>Código de Barras</th>
                       <th>Logo</th>
                       <th>Observação</th>
                       <th></th>
@@ -202,26 +227,27 @@ export default function Finalizacao() {
                   <tbody>
                     {carrinhoIdentificadores.map((item, index) => (
                       <tr key={index}>
-                        <td>{item.especie}</td>
-                        <td>{item.tipo}</td>
-                        <td>{item.macho}</td>
-                        <td>{item.femea}</td>
-                        <td>{item.cor}</td>
-                        <td>{item.quantidade}</td>
-                        <td>{item.numeroInicial}</td>
-                        <td>{item.numeroFinal}</td>
-                        <td>{item.vezes}</td>
-                        <td>{item.codigoDeBarras}</td>
-                        <td><img src={item.logo} alt="Logo" /></td>
-                        <td>{item.observacao}</td>
+                        <td onMouseOver={(e) => handleMouseOver(e, item.tipo)}>{item.tipo && item.tipo.length > 20 ? `${item.tipo.slice(0, 20)}...` : item.tipo}</td>
+                        <td onMouseOver={(e) => handleMouseOver(e, item.especie)}>{item.especie && item.especie.length > 20 ? `${item.especie.slice(0, 20)}...` : item.especie}</td>
+                        <td onMouseOver={(e) => handleMouseOver(e, item.opcao)}>{item.opcao && item.opcao.length > 20 ? `${item.opcao.slice(0, 20)}...` : item.opcao}</td>
+                        <td onMouseOver={(e) => handleMouseOver(e, item.macho)}>{item.macho && item.macho.length > 20 ? `${item.macho.slice(0, 20)}...` : item.macho}</td>
+                        <td onMouseOver={(e) => handleMouseOver(e, item.femea)}>{item.femea && item.femea.length > 20 ? `${item.femea.slice(0, 20)}...` : item.femea}</td>
+                        <td onMouseOver={(e) => handleMouseOver(e, item.gravacao)}>{item.gravacao && item.gravacao.length > 20 ? `${item.gravacao.slice(0, 20)}...` : item.gravacao}</td>
+                        <td onMouseOver={(e) => handleMouseOver(e, item.cor)}>{item.cor && item.cor.length > 20 ? `${item.cor.slice(0, 20)}...` : item.cor}</td>
+                        <td onMouseOver={(e) => handleMouseOver(e, item.fazenda)}>{item.fazenda && item.fazenda.length > 20 ? `${item.fazenda.slice(0, 20)}...` : item.fazenda}</td>
+                        <td onMouseOver={(e) => handleMouseOver(e, item.quantidade)}>{item.quantidade && item.quantidade.length > 20 ? `${item.quantidade.slice(0, 20)}...` : item.quantidade}</td>
+                        <td onMouseOver={(e) => handleMouseOver(e, item.numeroInicial)}>{item.numeroInicial && item.numeroInicial.length > 20 ? `${item.numeroInicial.slice(0, 20)}...` : item.numeroInicial}</td>
+                        <td onMouseOver={(e) => handleMouseOver(e, item.numeroFinal)}>{item.numeroFinal && item.numeroFinal.length > 20 ? `${item.numeroFinal.slice(0, 20)}...` : item.numeroFinal}</td>
+                        <td onMouseOver={(e) => handleMouseOver(e, item.logo)}>{item.logo ? <img src={item.logo} alt="Logo" /> : 'Não'}</td>
+                        <td onMouseOver={(e) => handleMouseOver(e, item.observacao)}>{item.observacao && item.observacao.length > 20 ? `${item.observacao.slice(0, 20)}...` : item.observacao}</td>
                         <td>
                           <img src={Trash} className='trash-icon' onClick={() => handleRemoveIdentificador(index)} alt="trash" />
-                          {/* <button onClick={() => handleRemoveIdentificador(index)}>X</button> */}
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
+
               )}
             </div>
             <div className='acessorios-div'>
@@ -258,6 +284,16 @@ export default function Finalizacao() {
             </div>
           </FinalizacaoRight>
         </FinalizacaoDiv>
+        {/* Componente para renderizar o modal de aviso */}
+        {modalVisible && (
+          <Modal>
+            <div className="modal-content">
+              <img className='x-button' src={Xbutton} onClick={closeModal} alt="x-button" />
+              <h3>Atenção</h3>
+              <p>Todos os campos obrigatórios devem ser preenchidos.</p>
+            </div>
+          </Modal>
+        )}
       </FinalizacaoContainer>
     </>
   )
