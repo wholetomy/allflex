@@ -12,7 +12,7 @@ function App() {
       {/* <Router> */}
       <ResetStyles />
       <Routes>
-        <Route path="/inicio" element={<Inicio />} />
+        <Route path="/" element={<Inicio />} />
         <Route path="/identificadores" element={<Identificadores />} />
         <Route path="/acessorios" element={<Acessorios />} />
         <Route path="/finalizacao" element={<Finalizacao />} />
