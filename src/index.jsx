@@ -6,9 +6,9 @@ import App from './App';
 
 const Index = () => {
   return (
-    <HashRouter basename="/">
+    <BrowserRouter basename="/">
       <App />
-    </HashRouter>
+    </BrowserRouter>
   )
 }
 
