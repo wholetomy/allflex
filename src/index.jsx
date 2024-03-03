@@ -6,7 +6,7 @@ import App from './App';
 
 const Index = () => {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/index.html">
       <App />
     </BrowserRouter>
   )
