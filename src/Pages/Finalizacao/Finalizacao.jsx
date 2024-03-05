@@ -4,6 +4,7 @@ import Etapas from '../../Components/Etapas/Etapas'
 import { FinalizacaoContainer, FinalizacaoDiv, FinalizacaoLeft, FinalizacaoRight, EtapasDiv, Modal } from './Finalizacao.styles';
 import Trash from '../../Components/Images/Acessorios/trash.svg';
 import Xbutton from '../../Components/Images/Acessorios/x-square.svg';
+import axios from 'axios';
 
 export default function Finalizacao() {
 
@@ -18,6 +19,7 @@ export default function Finalizacao() {
     if (camposPreenchidos) {
       // Todos os campos obrigatórios estão preenchidos, continuar com a lógica para solicitar o pedido
       localStorage.setItem('informacoesCliente', JSON.stringify(clienteInfo));
+      enviarParaBancoDeDados();
     } else {
       // Exibir o modal de aviso informando que todos os campos obrigatórios devem ser preenchidos
       setModalVisible(true);
@@ -26,6 +28,25 @@ export default function Finalizacao() {
 
   const closeModal = () => {
     setModalVisible(false);
+  };
+
+  const enviarParaBancoDeDados = () => {
+    axios.post('https://i9bnl8uzma.execute-api.us-east-1.amazonaws.com/dev/criar-pedido', {
+      //clienteInfo: clienteInfo,
+      //carrinhoIdentificadores: carrinhoIdentificadores,
+      //carrinhoAcessorios: carrinhoAcessorios
+    })
+      .then(response => {
+        console.log('Dados enviados com sucesso:', response.data);
+        // Limpar o localStorage após o envio bem-sucedido, se necessário
+        //localStorage.removeItem('informacoesCliente');
+        //localStorage.removeItem('carrinhoIdentificadores');
+        //localStorage.removeItem('carrinhoAcessorios');
+      })
+      .catch(error => {
+        console.error('Erro ao enviar os dados:', error);
+        // Tratar erros, exibir mensagens de erro, etc.
+      });
   };
 
   //Final obrigatoriedade dos campos
@@ -284,7 +305,6 @@ export default function Finalizacao() {
             </div>
           </FinalizacaoRight>
         </FinalizacaoDiv>
-        {/* Componente para renderizar o modal de aviso */}
         {modalVisible && (
           <Modal>
             <div className="modal-content">

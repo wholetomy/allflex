@@ -157,6 +157,10 @@ export const IdentificadoresLeft = styled.div`
         position: relative;
     }
 
+    .required {
+        color: red;
+    }
+
     @media screen and (max-width: 810px) {
         width: 100%;
         height: 400px;
@@ -391,3 +395,20 @@ export const EtapasDiv = styled.div`
         display: none;
     }
 `; 
+
+export const Modal = styled.div`
+    position: absolute;
+    max-width: 800px;
+    padding: 25px;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.17);
+    border-radius: 14px;
+    margin: 25px;
+
+    .x-button {
+        position: absolute;
+        right: 25px;
+        cursor: pointer;
+    }
+`;

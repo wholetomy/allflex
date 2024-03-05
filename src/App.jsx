@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import ResetStyles from './Components/Styles/ResetStyles';
 import Inicio from './Pages/Inicio/Inicio';
 import Identificadores from './Pages/Identificadores/Identificadores';

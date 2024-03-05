@@ -140,8 +140,6 @@ export const FinalizacaoLeft = styled.div`
         background-color: #bee9e8;
     }
 
-    /* Dentro do seu arquivo de estilos (por exemplo, Finalizacao.styles.js) */
-
     .required {
         color: red;
     }

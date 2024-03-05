@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-import { IdentificadoresContainer, IdentificadoresDiv, IdentificadoresLeft, IdentificadoresRight, LogoViewer, Carrinho, EtapasDiv } from './Identificadores.styles'
+import { IdentificadoresContainer, IdentificadoresDiv, IdentificadoresLeft, IdentificadoresRight, Modal, Carrinho, EtapasDiv } from './Identificadores.styles'
 import Etapas from '../../Components/Etapas/Etapas'
 import { Link } from 'react-router-dom';
 import shopingCartIcon from '../../Components/Images/Identificadores/shopping-cart-icon.svg';
 import Trash from '../../Components/Images/Acessorios/trash.svg';
+import Xbutton from '../../Components/Images/Acessorios/x-square.svg';
 import { FemEletHdxFdxSVG, FemGrandeSVG, FemMaxiSVG, FemMediaSVG, FemOvinoCaprinoSVG, FemPequenaSVG, FemSuinoOvinoSVG, MachoGrandeSVG, MachoMaxiSVG, MachoMedioSVG, MachoOvinoCaprinoSVG, MachoPequenoSVG, MachoTipTagSVG } from '../../Components/SVG/Identificadores.svg.jsx';
 
 
@@ -113,6 +114,22 @@ export default function Inicio() {
   };
 
   const addToCart = () => {
+    if (!selectedType
+      || (!optionType && selectedType == 1)
+      || !selectedSpecies
+      || !selectedMachoType
+      || !selectedFemeaType
+      || !selectedRecordingType
+      || !selectedColor
+      || !quantity
+      || !farmName
+      || (selectedType == 2 && selectedRecordingType != 5 && !initialNumber)
+      || (selectedType == 2 && selectedRecordingType != 5 && !finalNumber)
+    ) {
+      chamarModal('Todos os campos obrigatórios devem ser preenchidos.')
+      return;
+    }
+
     const newItem = {
       tipo: getTypeName(selectedType),
       especie: getSpecieName(selectedSpecies),
@@ -129,11 +146,11 @@ export default function Inicio() {
       observacao: observation,
     };
 
-    // Atualiza o estado local do carrinho
+    // Atualizar o estado local do carrinho
     setCartItems([...cartItems, newItem]);
-    setLogoUrl(''); // Limpa URL do logo após adicionar ao carrinho
+    setLogoUrl(''); // Limpar URL do logo após adicionar ao carrinho
 
-    // Salva os itens do carrinho no localStorage
+    // Salvar os itens do carrinho no localStorage
     const carrinhoAtualizado = [...cartItems, newItem];
     localStorage.setItem('carrinhoIdentificadores', JSON.stringify(carrinhoAtualizado));
 
@@ -163,22 +180,42 @@ export default function Inicio() {
 
   //Inicio de Logo
   const [logoUrl, setLogoUrl] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       const fileType = file.type;
+      const fileSize = file.size;
+      const maxSize = 5 * 1024 * 1024; // 5MB em bytes
       if (fileType === 'image/jpeg' || fileType === 'image/png') {
+        if (fileSize > maxSize) {
+          chamarModal('O tamanho do arquivo excede 5MB. Por favor, selecione um arquivo menor.');
+          return;
+        }
         const reader = new FileReader();
         reader.readAsDataURL(file);
+        console.log('arquivo:', file)
         reader.onload = () => {
-          setLogoUrl(reader.result); // Atualiza o estado com o URL do logo
+          // Atualiza o estado com o URL do logo
+          setLogoUrl(reader.result);
         };
       } else {
-        alert('Por favor, selecione um arquivo JPEG ou PNG.');
+        chamarModal('Por favor, selecione um arquivo JPEG ou PNG.');
       }
     }
   };
+
+  const chamarModal = (message) => {
+    setModalMessage(message);
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
   //Final de Logo
 
   //Inicio Mapeie os nomes dos tipos para os componentes SVGs
@@ -318,7 +355,7 @@ export default function Inicio() {
               <div className='options-div-master'>
                 <div className='options-div'>
                   <div className='options-div-long'>
-                    <span>Tipo do Identificador</span>
+                    <span>Tipo do Identificador<span className="required">*</span></span>
                     <select value={selectedType} onChange={(e) => handleSelectionChange('selectedType', e.target.value)}>
                       <option value="">Selecione...</option>
                       {dataAPI.tipo_identificador.map((tipo) => (
@@ -330,8 +367,8 @@ export default function Inicio() {
                 {selectedType == 1 && (
                   <div className='options-div'>
                     <div className='options-div-long'>
-                      <span>Opção do Identificador</span>
-                      <select value={optionType} onChange={(e) => handleSelectionChange('optionType', e.target.value)} disabled={!handleDropdownEnabled('optionType')}>
+                      <span>Opção do Identificador<span className="required">*</span></span>
+                      <select id="optionDropDownList" value={optionType} onChange={(e) => handleSelectionChange('optionType', e.target.value)} disabled={!handleDropdownEnabled('optionType')}>
                         <option value="">Selecione...</option>
                         <option value="Inviolável">Inviolável</option>
                         <option value="Reutilizável">Reutilizável</option>
@@ -341,7 +378,7 @@ export default function Inicio() {
                 )}
                 <div className='options-div'>
                   <div className='options-div-long'>
-                    <span>Selecione a espécie</span>
+                    <span>Selecione a espécie<span className="required">*</span></span>
                     <select value={selectedSpecies} onChange={(e) => handleSelectionChange('selectedSpecies', e.target.value)} disabled={!handleDropdownEnabled('selectedSpecies') || !selectedType}>
                       <option value="">Selecione...</option>
                       {dataAPI.especie.filter(e => e.cod_tipo_identificador == selectedType).map((especie) => (
@@ -352,7 +389,7 @@ export default function Inicio() {
                 </div>
                 <div className='options-div'>
                   <div className='options-div-small'>
-                    <span>Tipo de Macho</span>
+                    <span>Tipo de Macho<span className="required">*</span></span>
                     <select value={selectedMachoType} onChange={(e) => handleSelectionChange('selectedMachoType', e.target.value)} disabled={!handleDropdownEnabled('selectedMachoType')}>
                       <option value="">Selecione...</option>
                       {dataAPI.macho.filter(e => e.cod_especie == selectedSpecies).map((macho) => (
@@ -361,7 +398,7 @@ export default function Inicio() {
                     </select>
                   </div>
                   <div className='options-div-small'>
-                    <span>Tipo de Fêmea</span>
+                    <span>Tipo de Fêmea<span className="required">*</span></span>
                     <select value={selectedFemeaType} onChange={(e) => handleSelectionChange('selectedFemeaType', e.target.value)} disabled={!handleDropdownEnabled('selectedFemeaType')}>
                       <option value="">Selecione...</option>
                       {dataAPI.machos_femeas_depara.filter(e => e.cod_macho == selectedMachoType).map((depara) => {
@@ -376,7 +413,7 @@ export default function Inicio() {
                 </div>
                 <div className='options-div'>
                   <div className='options-div-long'>
-                    <span>Tipo de gravação</span>
+                    <span>Tipo de gravação<span className="required">*</span></span>
                     <select value={selectedRecordingType} onChange={(e) => handleSelectionChange('selectedRecordingType', e.target.value)} disabled={!handleDropdownEnabled('selectedRecordingType')}>
                       <option value="">Selecione...</option>
                       {dataAPI.femeas_tipo_gravacoes_depara.filter(e => e.cod_femea == selectedFemeaType).map((depara) => {
@@ -391,7 +428,7 @@ export default function Inicio() {
                 </div>
                 <div className='options-div'>
                   <div className='options-div-small'>
-                    <span>Cores disponíveis</span>
+                    <span>Cores disponíveis<span className="required">*</span></span>
                     <select value={selectedColor} onChange={handleColorChange} disabled={!handleDropdownEnabled('selectedFemeaType')}>
                       {/* <option value="">Selecione...</option> */}
                       {dataAPI.cores_machos_depara.filter(e => e.cod_macho == selectedMachoType).map((depara) => {
@@ -404,25 +441,25 @@ export default function Inicio() {
                     </select>
                   </div>
                   <div className='options-div-small'>
-                    <span>Quantidade</span>
+                    <span>Quantidade<span className="required">*</span></span>
                     <input type="text" value={quantity} maxLength={5} onChange={handleInputChange(setQuantity)} />
                   </div>
                 </div>
-                {selectedType == 2 && (
+                {selectedType == 2 && selectedRecordingType != 5 && (
                   <div className='options-div'>
                     <div className='options-div-small'>
-                      <span>Número Inicial</span>
+                      <span>Número Inicial<span className="required">*</span></span>
                       <input type="text" value={initialNumber} maxLength={5} onChange={handleInputChange(setInitialNumber)} />
                     </div>
                     <div className='options-div-small'>
-                      <span>Número Final</span>
+                      <span>Número Final<span className="required">*</span></span>
                       <input type="text" value={finalNumber} maxLength={5} onChange={handleInputChange(setFinalNumber)} />
                     </div>
                   </div>
                 )}
                 <div className='options-div'>
                   <div className='options-div-long'>
-                    <span>Nome da fazenda</span>
+                    <span>Nome da fazenda<span className="required">*</span></span>
                     <input type="text" value={farmName} maxLength={40} onChange={(e) => setFarmName(e.target.value)} />
                   </div>
                 </div>
@@ -488,8 +525,6 @@ export default function Inicio() {
                             <th>Quantidade</th>
                             <th>Número Inicial</th>
                             <th>Número Final</th>
-                            {/* <th>Vezes</th> */}
-                            {/* <th>Código de Barras</th> */}
                             <th>Logo</th>
                             <th>Observação</th>
                             <th></th>
@@ -509,8 +544,6 @@ export default function Inicio() {
                               <td onMouseOver={(e) => handleMouseOver(e, item.quantidade)}>{item.quantidade && item.quantidade.length > 20 ? `${item.quantidade.slice(0, 20)}...` : item.quantidade}</td>
                               <td onMouseOver={(e) => handleMouseOver(e, item.numeroInicial)}>{item.numeroInicial && item.numeroInicial.length > 20 ? `${item.numeroInicial.slice(0, 20)}...` : item.numeroInicial}</td>
                               <td onMouseOver={(e) => handleMouseOver(e, item.numeroFinal)}>{item.numeroFinal && item.numeroFinal.length > 20 ? `${item.numeroFinal.slice(0, 20)}...` : item.numeroFinal}</td>
-                              {/* <td onMouseOver={(e) => handleMouseOver(e, item.vezes)}>{item.vezes && item.vezes.length > 20 ? `${item.vezes.slice(0, 20)}...` : item.vezes}</td>
-                              <td onMouseOver={(e) => handleMouseOver(e, item.codigoDeBarras)}>{item.codigoDeBarras && item.codigoDeBarras.length > 20 ? `${item.codigoDeBarras.slice(0, 20)}...` : item.codigoDeBarras}</td> */}
                               <td onMouseOver={(e) => handleMouseOver(e, item.logo)}>{item.logo ? <img src={item.logo} alt="Logo" /> : 'Não'}</td>
                               <td onMouseOver={(e) => handleMouseOver(e, item.observacao)}>{item.observacao && item.observacao.length > 20 ? `${item.observacao.slice(0, 20)}...` : item.observacao}</td>
                               <td>
@@ -549,6 +582,15 @@ export default function Inicio() {
               </IdentificadoresRight>
             )}
           </IdentificadoresDiv>
+          {modalVisible && (
+            <Modal>
+              <div className="modal-content">
+                <img className='x-button' src={Xbutton} onClick={closeModal} alt="x-button" />
+                <h3>Atenção</h3>
+                <p>{modalMessage}</p>
+              </div>
+            </Modal>
+          )}
         </IdentificadoresContainer>
         :
         <div>{/* por um loading aqui */}</div>
