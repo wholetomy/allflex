@@ -30,8 +30,8 @@ export default function Finalizacao() {
     setModalVisible(false);
   };
 
-  /*   const enviarParaBancoDeDados = () => {
-      axios.post('https://i9bnl8uzma.execute-api.us-east-1.amazonaws.com/dev/criar-pedido', {
+/*     const enviarParaBancoDeDados = () => {
+      axios.post('https://i9bnl8uzma.execute-api.us-east-1.amazonaws.com/dev/pedido', {
         clienteInfo: clienteInfo,
         carrinhoIdentificadores: carrinhoIdentificadores,
         carrinhoAcessorios: carrinhoAcessorios
@@ -50,12 +50,39 @@ export default function Finalizacao() {
     };
    */
 
-  const enviarParaBancoDeDados = () => {
+/*   const enviarParaBancoDeDados = () => {
     const data = {
       teste: "Este é um teste de exemplo no react"
     };
 
-    axios.post('https://i9bnl8uzma.execute-api.us-east-1.amazonaws.com/dev/teste', data)
+    axios.post('https://i9bnl8uzma.execute-api.us-east-1.amazonaws.com/dev/createPedido', data)
+      .then(response => {
+        console.log('Dados enviados com sucesso:', response.data);
+        // Limpar o localStorage após o envio bem-sucedido, se necessário
+        //localStorage.removeItem('informacoesCliente');
+        //localStorage.removeItem('carrinhoIdentificadores');
+        //localStorage.removeItem('carrinhoAcessorios');
+      })
+      .catch(error => {
+        console.error('Erro ao enviar os dados:', error);
+        // Tratar erros, exibir mensagens de erro, etc.
+      });
+  }; */
+
+  const enviarParaBancoDeDados = () => {
+    const data = {
+      clienteInfo: {
+        clienteAllflex: "Sim",
+        cnpjCpf: "12345678900",
+        inscricaoEstadual: "123456",
+        nomeFazenda: "Fazenda Teste",
+        telefone: "123456789",
+        email: "cliente@example.com",
+        observacoes: "Observações sobre o pedido"
+      }
+    };
+  
+    axios.post('https://i9bnl8uzma.execute-api.us-east-1.amazonaws.com/dev/pedido', data)
       .then(response => {
         console.log('Dados enviados com sucesso:', response.data);
         // Limpar o localStorage após o envio bem-sucedido, se necessário
