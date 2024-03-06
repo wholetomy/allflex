@@ -79,7 +79,30 @@ export default function Finalizacao() {
         telefone: "123456789",
         email: "cliente@example.com",
         observacoes: "Observações sobre o pedido"
-      }
+      },
+      carrinhoIdentificadores: [
+        {
+          tipo: "Eletrônico",
+          opcao: "Inviolável",
+          especie: "Não aplicável",
+          macho: "Pequeno Longo",
+          femea: "FDX",
+          gravacao: "Fêmea numerada",
+          cor: "Amarelo",
+          quantidade: 100,
+          numeroInicial: null,
+          numeroFinal: null,
+          fazenda: "Fazenda Allflex",
+          logo: null,
+          observacao: "Meu pedido tem que ser rápido."
+        }
+      ],
+      carrinhoAcessorios: [
+        {
+          acessorio: "Furador Allflex",
+          quantidade: 2
+        }
+      ]
     };
   
     axios.post('https://i9bnl8uzma.execute-api.us-east-1.amazonaws.com/dev/pedido', data)
