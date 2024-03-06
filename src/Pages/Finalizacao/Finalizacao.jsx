@@ -30,25 +30,33 @@ export default function Finalizacao() {
     setModalVisible(false);
   };
 
-/*     const enviarParaBancoDeDados = () => {
-      axios.post('https://i9bnl8uzma.execute-api.us-east-1.amazonaws.com/dev/pedido', {
-        clienteInfo: clienteInfo,
-        carrinhoIdentificadores: carrinhoIdentificadores,
-        carrinhoAcessorios: carrinhoAcessorios
+  const enviarParaBancoDeDados = () => {
+    // Mostrar os dados que serão enviados para o console
+    console.log('Dados a serem enviados:', {
+      clienteInfo: clienteInfo,
+      carrinhoIdentificadores: carrinhoIdentificadores,
+      carrinhoAcessorios: carrinhoAcessorios
+    });
+  
+    axios.post('https://i9bnl8uzma.execute-api.us-east-1.amazonaws.com/dev/pedido', {
+      clienteInfo: clienteInfo,
+      carrinhoIdentificadores: carrinhoIdentificadores,
+      carrinhoAcessorios: carrinhoAcessorios
+    })
+      .then(response => {
+        console.log('Dados enviados com sucesso:', response.data);
+        // Limpar o localStorage após o envio bem-sucedido, se necessário
+        localStorage.removeItem('informacoesCliente');
+        localStorage.removeItem('carrinhoIdentificadores');
+        localStorage.removeItem('carrinhoAcessorios');
       })
-        .then(response => {
-          console.log('Dados enviados com sucesso:', response.data);
-          // Limpar o localStorage após o envio bem-sucedido, se necessário
-          //localStorage.removeItem('informacoesCliente');
-          //localStorage.removeItem('carrinhoIdentificadores');
-          //localStorage.removeItem('carrinhoAcessorios');
-        })
-        .catch(error => {
-          console.error('Erro ao enviar os dados:', error);
-          // Tratar erros, exibir mensagens de erro, etc.
-        });
-    };
-   */
+      .catch(error => {
+        console.error('Erro ao enviar os dados:', error);
+        // Tratar erros, exibir mensagens de erro, etc.
+      });
+  };
+  
+  
 
 /*   const enviarParaBancoDeDados = () => {
     const data = {
@@ -69,7 +77,7 @@ export default function Finalizacao() {
       });
   }; */
 
-  const enviarParaBancoDeDados = () => {
+/*   const enviarParaBancoDeDados = () => {
     const data = {
       clienteInfo: {
         clienteAllflex: "Sim",
@@ -117,7 +125,7 @@ export default function Finalizacao() {
         console.error('Erro ao enviar os dados:', error);
         // Tratar erros, exibir mensagens de erro, etc.
       });
-  };
+  }; */
 
   //Final obrigatoriedade dos campos
 
