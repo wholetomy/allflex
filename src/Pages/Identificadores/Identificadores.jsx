@@ -459,7 +459,7 @@ export default function Inicio() {
                 )}
                 <div className='options-div'>
                   <div className='options-div-long'>
-                    <span>Nome da fazenda<span className="required">*</span></span>
+                    <span>Fazenda para Gravação<span className="required">*</span></span>
                     <input type="text" value={farmName} maxLength={40} onChange={(e) => setFarmName(e.target.value)} />
                   </div>
                 </div>
