@@ -463,12 +463,14 @@ export default function Inicio() {
                     <input type="text" value={farmName} maxLength={40} onChange={(e) => setFarmName(e.target.value)} />
                   </div>
                 </div>
-                <div className='options-div'>
-                  <div className='options-div-long'>
-                    <span>Logo</span>
-                    <input type="file" accept=".jpg, .jpeg, .png" onChange={handleFileChange} />
+                {selectedRecordingType != '' && selectedRecordingType != 5 && (
+                  <div className='options-div'>
+                    <div className='options-div-long'>
+                      <span>Logo</span>
+                      <input type="file" accept=".jpg, .jpeg, .png" onChange={handleFileChange} />
+                    </div>
                   </div>
-                </div>
+                )}
                 <div className='options-div'>
                   <div className='options-div-long'>
                     <span>Observação</span>

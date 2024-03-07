@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import Etapas from '../../Components/Etapas/Etapas'
 import { FinalizacaoContainer, FinalizacaoDiv, FinalizacaoLeft, FinalizacaoRight, EtapasDiv, Modal } from './Finalizacao.styles';
 import Trash from '../../Components/Images/Acessorios/trash.svg';
@@ -11,6 +11,7 @@ export default function Finalizacao() {
   //Início obrigatoriedade dos campos
 
   const [modalVisible, setModalVisible] = useState(false);
+  const navigate = useNavigate();
 
   const handleSolicitarPedido = () => {
     const camposObrigatorios = ['cnpjCpf', 'nomeFazenda', 'telefone', 'email'];
@@ -20,8 +21,10 @@ export default function Finalizacao() {
       // Todos os campos obrigatórios estão preenchidos, continuar com a lógica para solicitar o pedido
       localStorage.setItem('informacoesCliente', JSON.stringify(clienteInfo));
       enviarParaBancoDeDados();
+      navigate("/final");
     } else {
       // Exibir o modal de aviso informando que todos os campos obrigatórios devem ser preenchidos
+      setErrorMessage('Todos os campos obrigatórios devem ser preenchidos.');
       setModalVisible(true);
     }
   };
@@ -29,15 +32,34 @@ export default function Finalizacao() {
   const closeModal = () => {
     setModalVisible(false);
   };
+  //Final obrigatoriedade dos campos
+
+  //Início de funções de solicitar pedido
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleSuccess = () => {
+    // Limpar os campos de clienteInfo
+    setClienteInfo({
+      clienteAllflex: 'Sim',
+      cnpjCpf: '',
+      inscricaoEstadual: '',
+      nomeFazenda: '',
+      telefone: '',
+      email: '',
+      observacoes: ''
+    });
+
+    // Limpar os carrinhos
+    setCarrinhoIdentificadores([]);
+    setCarrinhoAcessorios([]);
+
+    // Limpar o localStorage
+    localStorage.removeItem('informacoesCliente');
+    localStorage.removeItem('carrinhoIdentificadores');
+    localStorage.removeItem('carrinhoAcessorios');
+  };
 
   const enviarParaBancoDeDados = () => {
-    // Mostrar os dados que serão enviados para o console
-    console.log('Dados a serem enviados:', {
-      clienteInfo: clienteInfo,
-      carrinhoIdentificadores: carrinhoIdentificadores,
-      carrinhoAcessorios: carrinhoAcessorios
-    });
-  
     axios.post('https://i9bnl8uzma.execute-api.us-east-1.amazonaws.com/dev/pedido', {
       clienteInfo: clienteInfo,
       carrinhoIdentificadores: carrinhoIdentificadores,
@@ -45,89 +67,17 @@ export default function Finalizacao() {
     })
       .then(response => {
         console.log('Dados enviados com sucesso:', response.data);
-        // Limpar o localStorage após o envio bem-sucedido, se necessário
-        localStorage.removeItem('informacoesCliente');
-        localStorage.removeItem('carrinhoIdentificadores');
-        localStorage.removeItem('carrinhoAcessorios');
+        handleSuccess();
       })
       .catch(error => {
         console.error('Erro ao enviar os dados:', error);
-        // Tratar erros, exibir mensagens de erro, etc.
+        // Atualizar a mensagem de erro
+        setErrorMessage('Erro: ' + error.message);
+        // Abrir o modal de erro
+        setModalVisible(true);
       });
   };
-  
-  
-
-/*   const enviarParaBancoDeDados = () => {
-    const data = {
-      teste: "Este é um teste de exemplo no react"
-    };
-
-    axios.post('https://i9bnl8uzma.execute-api.us-east-1.amazonaws.com/dev/createPedido', data)
-      .then(response => {
-        console.log('Dados enviados com sucesso:', response.data);
-        // Limpar o localStorage após o envio bem-sucedido, se necessário
-        //localStorage.removeItem('informacoesCliente');
-        //localStorage.removeItem('carrinhoIdentificadores');
-        //localStorage.removeItem('carrinhoAcessorios');
-      })
-      .catch(error => {
-        console.error('Erro ao enviar os dados:', error);
-        // Tratar erros, exibir mensagens de erro, etc.
-      });
-  }; */
-
-/*   const enviarParaBancoDeDados = () => {
-    const data = {
-      clienteInfo: {
-        clienteAllflex: "Sim",
-        cnpjCpf: "12345678900",
-        inscricaoEstadual: "123456",
-        nomeFazenda: "Fazenda Teste",
-        telefone: "123456789",
-        email: "cliente@example.com",
-        observacoes: "Observações sobre o pedido"
-      },
-      carrinhoIdentificadores: [
-        {
-          tipo: "Eletrônico",
-          opcao: "Inviolável",
-          especie: "Não aplicável",
-          macho: "Pequeno Longo",
-          femea: "FDX",
-          gravacao: "Fêmea numerada",
-          cor: "Amarelo",
-          quantidade: 100,
-          numeroInicial: null,
-          numeroFinal: null,
-          fazenda: "Fazenda Allflex",
-          logo: null,
-          observacao: "Meu pedido tem que ser rápido."
-        }
-      ],
-      carrinhoAcessorios: [
-        {
-          acessorio: "Furador Allflex",
-          quantidade: 2
-        }
-      ]
-    };
-  
-    axios.post('https://i9bnl8uzma.execute-api.us-east-1.amazonaws.com/dev/pedido', data)
-      .then(response => {
-        console.log('Dados enviados com sucesso:', response.data);
-        // Limpar o localStorage após o envio bem-sucedido, se necessário
-        //localStorage.removeItem('informacoesCliente');
-        //localStorage.removeItem('carrinhoIdentificadores');
-        //localStorage.removeItem('carrinhoAcessorios');
-      })
-      .catch(error => {
-        console.error('Erro ao enviar os dados:', error);
-        // Tratar erros, exibir mensagens de erro, etc.
-      });
-  }; */
-
-  //Final obrigatoriedade dos campos
+  //Final de funções de solicitar pedido
 
   //Início de funções para pegar o carrinho de acessórios
   const [carrinhoIdentificadores, setCarrinhoIdentificadores] = useState([]);
@@ -387,8 +337,8 @@ export default function Finalizacao() {
           <Modal>
             <div className="modal-content">
               <img className='x-button' src={Xbutton} onClick={closeModal} alt="x-button" />
-              <h3>Atenção</h3>
-              <p>Todos os campos obrigatórios devem ser preenchidos.</p>
+              <h3>Erro</h3>
+              <p>{errorMessage}</p>
             </div>
           </Modal>
         )}
