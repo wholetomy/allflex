@@ -162,15 +162,6 @@ export default function Finalizacao() {
     }
   }, []);
 
-  // Atualiza o estado quando os campos mudam
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setClienteInfo(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
-  };
-
   const handleMouseOver = (event, content) => {
     if (event.target.offsetWidth < event.target.scrollWidth) {
       event.target.title = content;
@@ -179,6 +170,47 @@ export default function Finalizacao() {
     }
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    let formattedValue;
+
+    // Verifica o nome do campo para determinar a formatação
+    if (name === "cnpjCpf") {
+      formattedValue = formatCpfCnpj(value);
+    } else if (name === "inscricaoEstadual") {
+      formattedValue = formatInscricaoEstadual(value);
+    } else {
+      formattedValue = value;
+    }
+
+    setClienteInfo(prevState => ({
+      ...prevState,
+      [name]: formattedValue
+    }));
+  };
+
+  const formatCpfCnpj = (value) => {
+    // Remove all non-digits
+    const cleanedValue = value.replace(/\D/g, '');
+
+    // Check the length to determine if it's CPF or CNPJ
+    if (cleanedValue.length <= 11) {
+      // Format CPF
+      return cleanedValue.replace(/^(\d{3})(\d{3})(\d{3})(\d{2}).*/, '$1.$2.$3-$4');
+    } else {
+      // Format CNPJ
+      return cleanedValue.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2}).*/, '$1.$2.$3/$4-$5');
+    }
+  };
+
+  const formatInscricaoEstadual = (value) => {
+    // Remove all non-digits
+    const cleanedValue = value.replace(/\D/g, '');
+
+    // Format Inscrição Estadual
+    // Exemplo: 123456789 -> 12.345.678-9
+    return cleanedValue.replace(/^(\d{2})(\d{3})(\d{3})(\d{1}).*/, '$1.$2.$3-$4');
+  };
 
   return (
     <>
@@ -203,14 +235,43 @@ export default function Finalizacao() {
                 </div>
               </div>
               <div className='options-div'>
+
+
+
                 <div className='options-div-small'>
                   <span>Digite seu CNPJ/CPF<span className="required">*</span></span>
-                  <input type="text" name="cnpjCpf" value={clienteInfo.cnpjCpf} onChange={handleChange} />
+                  <input
+                    type="text"
+                    name="cnpjCpf"
+                    value={clienteInfo.cnpjCpf}
+                    onChange={handleChange}
+                  />
                 </div>
+                {/*  <div className='options-div-small'>
+                  <span>Digite seu CNPJ/CPF<span className="required">*</span></span>
+                  <input type="text" name="cnpjCpf" value={clienteInfo.cnpjCpf} onChange={handleChange} />
+                </div> */}
+
+
+
                 <div className='options-div-small'>
                   <span>Inscrição Estadual</span>
-                  <input type="text" name="inscricaoEstadual" value={clienteInfo.inscricaoEstadual} onChange={handleChange} />
+                  <input
+                    type="text"
+                    name="inscricaoEstadual"
+                    value={clienteInfo.inscricaoEstadual}
+                    onChange={handleChange}
+                  />
                 </div>
+
+                {/* <div className='options-div-small'>
+                  <span>Inscrição Estadual</span>
+                  <input type="text" name="inscricaoEstadual" value={clienteInfo.inscricaoEstadual} onChange={handleChange} />
+                </div> */}
+
+
+
+
               </div>
               <div className='options-div'>
                 <div className='options-div-long'>

@@ -322,6 +322,14 @@ export default function Inicio() {
   //Final de funções para lidar com os dropdowns
 
   //Início de funções para corrigir valores nos dropdowns
+  const handleInputChange2 = (setValue) => (e) => {
+    const value = e.target.value;
+    // Verifica se o valor é um número (apenas dígitos) e maior que 1
+    if (/^\d*$/.test(value) && parseInt(value) >= 1) {
+      setValue(value);
+    }
+  };
+
   const handleInputChange = (setValue) => (e) => {
     const value = e.target.value;
     // Verifica se o valor é um número (apenas dígitos)
@@ -442,7 +450,7 @@ export default function Inicio() {
                   </div>
                   <div className='options-div-small'>
                     <span>Quantidade<span className="required">*</span></span>
-                    <input type="text" value={quantity} maxLength={5} onChange={handleInputChange(setQuantity)} />
+                    <input type="number" value={quantity} maxLength={5} onChange={handleInputChange2(setQuantity)} />
                   </div>
                 </div>
                 {selectedType == 2 && selectedRecordingType != 5 && (

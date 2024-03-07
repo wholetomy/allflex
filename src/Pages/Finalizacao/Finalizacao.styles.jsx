@@ -147,6 +147,10 @@ export const FinalizacaoLeft = styled.div`
     @media screen and (max-width: 810px) {
         width: 100%;
         height: 400px;
+
+        .button {
+            width: 100%;
+        }
     }
 `;
 
