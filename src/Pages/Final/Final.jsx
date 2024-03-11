@@ -19,7 +19,7 @@ export default function Final() {
                         <Link to="/">
                             <button>Finalizar</button>
                         </Link>
-                        <span>(Informações para contato: call center e WhatsApp)</span>
+                        <span>(Informações para contato: (11) 4004-4874 Telefone e WhatsApp)</span>
                     </div>
                 </FinalizacaoDiv>
             </FinalContainer>

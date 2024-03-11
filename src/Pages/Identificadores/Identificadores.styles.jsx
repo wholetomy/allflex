@@ -183,6 +183,8 @@ export const IdentificadoresRight = styled.div`
         svg {
             width: 200px;
             height: 200px;
+            /* width: 400px;
+            height: 400px; */
         }
 
         .macho-cor path,
@@ -206,6 +208,8 @@ export const IdentificadoresRight = styled.div`
         svg {
             width: 200px;
             height: 200px;
+            /* width: 400px;
+            height: 400px; */
         }
 
         div {

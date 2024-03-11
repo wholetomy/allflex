@@ -7,7 +7,6 @@ import Trash from '../../Components/Images/Acessorios/trash.svg';
 import acessorios from '../../Components/Arrays/Acessorios.arrays.jsx';
 
 export default function Acessorios() {
-
     const [selectedAcessorio, setSelectedAcessorio] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
     const [carrinho, setCarrinho] = useState(() => {

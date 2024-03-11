@@ -5,9 +5,11 @@ import Etapas from '../../Components/Etapas/Etapas'
 import { Link } from 'react-router-dom';
 import shopingCartIcon from '../../Components/Images/Identificadores/shopping-cart-icon.svg';
 import Trash from '../../Components/Images/Acessorios/trash.svg';
+import Swiper from '../../Components/Swiper/Swiper.jsx';
 import Xbutton from '../../Components/Images/Acessorios/x-square.svg';
 import { FemEletHdxFdxSVG, FemGrandeSVG, FemMaxiSVG, FemMediaSVG, FemOvinoCaprinoSVG, FemPequenaSVG, FemSuinoOvinoSVG, MachoGrandeSVG, MachoMaxiSVG, MachoMedioSVG, MachoOvinoCaprinoSVG, MachoPequenoSVG, MachoTipTagSVG } from '../../Components/SVG/Identificadores.svg.jsx';
 
+import { ReactComponent as Logo } from '../../Components/Images/Identificadores/logo.svg';
 
 export default function Inicio() {
 
@@ -101,15 +103,15 @@ export default function Inicio() {
     setSelectedSpecies('');
     setSelectedType('');
     setSelectedMachoType('');
-    setSelectedFemeaType('');
     setSelectedRecordingType('');
     setOptionType('Não aplicável');
     setSelectedColor('Amarelo');
     setQuantity('');
-    setInitialNumber('');
     setFinalNumber('');
     setFarmName('');
     setObservation('');
+    setInitialNumber('');
+    setSelectedFemeaType('');
     setLogoUrl('');
   };
 
@@ -221,31 +223,31 @@ export default function Inicio() {
   //Inicio Mapeie os nomes dos tipos para os componentes SVGs
   const machoSVGs = {
     /* Esses valores dependem da tabela SELECT * FROM macho */
-    1: <MachoPequenoSVG />,
-    2: <MachoMedioSVG />,
-    3: <MachoGrandeSVG />,
-    4: <MachoPequenoSVG />,
-    5: <MachoPequenoSVG />,
-    6: <MachoPequenoSVG />,
-    7: <MachoPequenoSVG />,
-    8: <MachoMedioSVG />,
-    9: <MachoGrandeSVG />,
-    10: <MachoMaxiSVG />,
-    11: <MachoPequenoSVG />,
-    12: <MachoOvinoCaprinoSVG />,
-    13: <MachoTipTagSVG />,
+    1: <MachoPequenoSVG text={farmName} uploadedFile={logoUrl} initialNumber={initialNumber} typeRecording={selectedRecordingType} />,
+    2: <MachoMedioSVG text={farmName} uploadedFile={logoUrl} initialNumber={initialNumber} typeRecording={selectedRecordingType} />,
+    3: <MachoGrandeSVG text={farmName} uploadedFile={logoUrl} initialNumber={initialNumber} typeRecording={selectedRecordingType} />,
+    4: <MachoPequenoSVG text={farmName} uploadedFile={logoUrl} initialNumber={initialNumber} typeRecording={selectedRecordingType} />,
+    5: <MachoPequenoSVG text={farmName} uploadedFile={logoUrl} initialNumber={initialNumber} typeRecording={selectedRecordingType} />,
+    6: <MachoPequenoSVG text={farmName} uploadedFile={logoUrl} initialNumber={initialNumber} typeRecording={selectedRecordingType} />,
+    7: <MachoPequenoSVG text={farmName} uploadedFile={logoUrl} initialNumber={initialNumber} typeRecording={selectedRecordingType} />,
+    8: <MachoMedioSVG text={farmName} uploadedFile={logoUrl} initialNumber={initialNumber} typeRecording={selectedRecordingType} />,
+    9: <MachoGrandeSVG text={farmName} uploadedFile={logoUrl} initialNumber={initialNumber} typeRecording={selectedRecordingType} />,
+    10: <MachoMaxiSVG text={farmName} uploadedFile={logoUrl} initialNumber={initialNumber} typeRecording={selectedRecordingType} />,
+    11: <MachoPequenoSVG text={farmName} uploadedFile={logoUrl} initialNumber={initialNumber} typeRecording={selectedRecordingType} />,
+    12: <MachoOvinoCaprinoSVG text={farmName} uploadedFile={logoUrl} initialNumber={initialNumber} typeRecording={selectedRecordingType} />,
+    13: <MachoTipTagSVG text={farmName} uploadedFile={logoUrl} initialNumber={initialNumber} typeRecording={selectedRecordingType} />,
   };
 
   const femeaSVGs = {
     /* Esses valores dependem da tabela SELECT * FROM femea */
-    1: <FemEletHdxFdxSVG />,
-    2: <FemEletHdxFdxSVG />,
-    3: <FemPequenaSVG />,
-    4: <FemGrandeSVG />,
-    5: <FemMediaSVG />,
-    6: <FemMaxiSVG />,
-    7: <FemOvinoCaprinoSVG />,
-    8: <FemSuinoOvinoSVG />
+    1: <FemEletHdxFdxSVG text={farmName} uploadedFile={logoUrl} initialNumber={initialNumber} typeRecording={selectedRecordingType} />,
+    2: <FemEletHdxFdxSVG text={farmName} uploadedFile={logoUrl} initialNumber={initialNumber} typeRecording={selectedRecordingType} />,
+    3: <FemPequenaSVG text={farmName} initialNumber={initialNumber} typeRecording={selectedRecordingType} />,
+    4: <FemGrandeSVG text={farmName} uploadedFile={logoUrl} initialNumber={initialNumber} typeRecording={selectedRecordingType} />,
+    5: <FemMediaSVG text={farmName} uploadedFile={logoUrl} initialNumber={initialNumber} typeRecording={selectedRecordingType} />,
+    6: <FemMaxiSVG text={farmName} uploadedFile={logoUrl} initialNumber={initialNumber} typeRecording={selectedRecordingType} />,
+    7: <FemOvinoCaprinoSVG text={farmName} uploadedFile={logoUrl} initialNumber={initialNumber} typeRecording={selectedRecordingType} />,
+    8: <FemSuinoOvinoSVG text={farmName} uploadedFile={logoUrl} initialNumber={initialNumber} typeRecording={selectedRecordingType} />,
   };
   //Final Mapeie os nomes dos tipos para os componentes SVGs
 
@@ -311,9 +313,15 @@ export default function Inicio() {
       case 'selectedFemeaType':
         setSelectedFemeaType(value);
         setSelectedRecordingType('');
+        setInitialNumber('');
+        setFarmName('');
+        setLogoUrl('');
         break;
       case 'selectedRecordingType':
         setSelectedRecordingType(value);
+        setInitialNumber('');
+        setFarmName('');
+        setLogoUrl('');
         break;
       default:
         break;
@@ -453,7 +461,7 @@ export default function Inicio() {
                     <input type="number" value={quantity} maxLength={5} onChange={handleInputChange2(setQuantity)} />
                   </div>
                 </div>
-                {selectedType == 2 && selectedRecordingType != 5 && (
+                {selectedType == 2 && selectedRecordingType != '' && selectedRecordingType != 5 && (
                   <div className='options-div'>
                     <div className='options-div-small'>
                       <span>Número Inicial<span className="required">*</span></span>
@@ -465,13 +473,15 @@ export default function Inicio() {
                     </div>
                   </div>
                 )}
-                <div className='options-div'>
-                  <div className='options-div-long'>
-                    <span>Fazenda para Gravação<span className="required">*</span></span>
-                    <input type="text" value={farmName} maxLength={40} onChange={(e) => setFarmName(e.target.value)} />
+                {selectedRecordingType != '' && selectedRecordingType != 5 && selectedRecordingType != 2 && selectedMachoType != 13 && (
+                  <div className='options-div'>
+                    <div className='options-div-long'>
+                      <span>Fazenda para Gravação<span className="required">*</span></span>
+                      <input type="text" value={farmName} maxLength={40} onChange={(e) => setFarmName(e.target.value)} />
+                    </div>
                   </div>
-                </div>
-                {selectedRecordingType != '' && selectedRecordingType != 5 && (
+                )}
+                {selectedRecordingType != '' && selectedRecordingType != 5 && selectedRecordingType != 2 && selectedFemeaType != 3 && selectedMachoType != 13 && (
                   <div className='options-div'>
                     <div className='options-div-long'>
                       <span>Logo</span>
@@ -501,7 +511,6 @@ export default function Inicio() {
                 </div>
               </div>
             </IdentificadoresLeft>
-
             {showCartScreen ? (
               <Carrinho
                 cartItems={cartItems}
