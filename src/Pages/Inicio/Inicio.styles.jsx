@@ -61,6 +61,7 @@ export const InicioContainer = styled.div`
         flex-direction: column;
         height: unset;
         grid-gap: 25px;
+        padding: 25px;
 
         .left-div {
             width: 100%;

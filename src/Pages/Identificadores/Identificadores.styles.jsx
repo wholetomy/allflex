@@ -232,6 +232,8 @@ export const IdentificadoresRight = styled.div`
     .imagem-gado {
         width: 100%;
         object-fit: cover;
+        object-position: top;
+        border-radius: 14px;
     }
 
     @media screen and (max-width: 810px) {
