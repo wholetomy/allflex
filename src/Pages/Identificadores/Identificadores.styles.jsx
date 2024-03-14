@@ -229,6 +229,11 @@ export const IdentificadoresRight = styled.div`
         }
     }
 
+    .imagem-gado {
+        width: 100%;
+        object-fit: cover;
+    }
+
     @media screen and (max-width: 810px) {
         width: 100%;
         flex-wrap: wrap;
@@ -398,7 +403,7 @@ export const EtapasDiv = styled.div`
     @media screen and (max-width: 500px) {
         display: none;
     }
-`; 
+`;
 
 export const Modal = styled.div`
     position: absolute;

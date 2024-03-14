@@ -1,15 +1,13 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { IdentificadoresContainer, IdentificadoresDiv, IdentificadoresLeft, IdentificadoresRight, Modal, Carrinho, EtapasDiv } from './Identificadores.styles'
 import Etapas from '../../Components/Etapas/Etapas'
 import { Link } from 'react-router-dom';
 import shopingCartIcon from '../../Components/Images/Identificadores/shopping-cart-icon.svg';
 import Trash from '../../Components/Images/Acessorios/trash.svg';
-import Swiper from '../../Components/Swiper/Swiper.jsx';
+import ImagemGado from '../../Components/Images/Identificadores/gado-com-brinco2.jpg';
 import Xbutton from '../../Components/Images/Acessorios/x-square.svg';
 import { FemEletHdxFdxSVG, FemGrandeSVG, FemMaxiSVG, FemMediaSVG, FemOvinoCaprinoSVG, FemPequenaSVG, FemSuinoOvinoSVG, MachoGrandeSVG, MachoMaxiSVG, MachoMedioSVG, MachoOvinoCaprinoSVG, MachoPequenoSVG, MachoTipTagSVG } from '../../Components/SVG/Identificadores.svg.jsx';
-
-import { ReactComponent as Logo } from '../../Components/Images/Identificadores/logo.svg';
 
 export default function Inicio() {
 
@@ -582,6 +580,9 @@ export default function Inicio() {
               </Carrinho>
             ) : (
               <IdentificadoresRight corSelecionada={getHexColor(selectedColor)}>
+                {!(machoSVGs[selectedMachoType] || femeaSVGs[selectedFemeaType]) && (
+                  <img className='imagem-gado' src={ImagemGado} alt="ImagemGado" />
+                )}
                 {machoSVGs[selectedMachoType] && (
                   <div className='macho-div'>
                     <h1>Macho</h1>

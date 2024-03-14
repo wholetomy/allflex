@@ -1,20 +1,5 @@
 import React from 'react';
 
-import { ReactComponent as MachoGrande } from '../../Components/Images/Identificadores/macho-grande.svg';
-import { ReactComponent as MachoMaxi } from '../../Components/Images/Identificadores/macho-maxi.svg';
-import { ReactComponent as MachoMedio } from '../../Components/Images/Identificadores/macho-medio.svg';
-import { ReactComponent as MachoOvinoCaprino } from '../../Components/Images/Identificadores/macho-ovino-caprino.svg';
-import { ReactComponent as MachoPequeno } from '../../Components/Images/Identificadores/macho-pequeno.svg';
-import { ReactComponent as MachoTipTag } from '../../Components/Images/Identificadores/macho-tip-tag.svg';
-
-/* export const MachoGrandeSVG = () => <MachoGrande />; */
-/* export const MachoMaxiSVG = () => <MachoMaxi />; */
-/* export const MachoMedioSVG = () => <MachoMedio />; */
-/* export const MachoOvinoCaprinoSVG = () => <MachoOvinoCaprino />; */
-/* export const MachoPequenoSVG = () => <MachoPequeno />; */
-/* export const MachoTipTagSVG = () => <MachoTipTag />; */
-
-/* MACHOS */
 export const MachoGrandeSVG = ({ text, uploadedFile, initialNumber, typeRecording }) => (
     <svg width="1448" height="2089" viewBox="0 0 1448 2089" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M176.212 2088.17C46.7445 2081.49 2.72556 2050.03 0 1928.13V1105.05C386.561 834.458 517.973 617.795 513.312 106.696H727.831V1105.05V2088.17H176.212Z" fill="#1A95D3" />
@@ -307,7 +292,7 @@ export const MachoOvinoCaprinoSVG = ({ text, uploadedFile, initialNumber, typeRe
 
 );
 
-export const MachoPequenoSVG = ({ text, uploadedFile, initialNumber, typeRecording }) => (
+export const MachoPequenoSVG = ({ text, initialNumber, typeRecording }) => (
     <svg width="587" height="587" viewBox="0 0 587 587" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g filter="url(#filter0_d_2058_936)">
             <circle cx="293.5" cy="289.5" r="289.5" fill="#1A95D3" />
@@ -366,10 +351,9 @@ export const MachoPequenoSVG = ({ text, uploadedFile, initialNumber, typeRecordi
             </radialGradient>
         </defs>
     </svg>
-
 );
 
-export const MachoTipTagSVG = ({ text, uploadedFile, initialNumber, typeRecording }) => (
+export const MachoTipTagSVG = ({ initialNumber, typeRecording }) => (
     <svg width="1448" height="409" viewBox="0 0 1448 409" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect x="749.555" y="221.463" width="698.447" height="187.388" rx="22" fill="#1A95D3" />
         <rect x="681.414" y="272.568" width="85.1764" height="68.1411" fill="#1A95D3" />
@@ -403,8 +387,6 @@ export const MachoTipTagSVG = ({ text, uploadedFile, initialNumber, typeRecordin
 
 );
 
-
-/* FEMEAS */
 export const FemEletHdxFdxSVG = ({ text, uploadedFile, typeRecording }) => (
     <svg width="687" height="688" viewBox="0 0 687 688" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g filter="url(#filter0_d_2058_1080)">
